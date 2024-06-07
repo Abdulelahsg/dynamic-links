@@ -9,7 +9,35 @@ const __dirname = path.dirname(__filename)
 const staticFolder = path.join(__dirname, '../static')
 
 export default async ({ req, res, log }) => {
-  const config = JSON.parse(process.env.CONFIG ?? '[]')
+  const config = [
+    {
+      "path": "/app",
+      "targets": {
+        "android": {
+          "appName": "Five",
+          "appPackage": "com.fivesocialmedia.fivesocialmedia",
+          "appPath": "user?screen_name=appwrite1",
+          "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
+        },
+        "ios": {
+          "appName": "twitter",
+          "appPath": "user?screen_name=appwrite",
+          "fallback": "https://apps.apple.com/in/app/fivesocialmedia/id1665131358"
+        },
+        "default": "https://twitter.com/appwrite"      
+      }
+    },
+    {
+      "path": "/app1",
+      "targets": {
+        "android": "https://play.google.com/store/apps/details?id=com.fivesocialmedia1.fivesocialmedia&pli=1",
+        "ios": "https://apps.apple.com/in/app/fivesocialmedia/id1665131358",
+        "default": "https://www.offeryard.com/"
+      }
+    }
+  ];
+  
+  // const config = JSON.parse(process.env.CONFIG ?? '[]')
 
   if (config.length === 0) {
     throw new Error('CONFIG environment variable must be set')
