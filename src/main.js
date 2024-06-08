@@ -33,7 +33,7 @@ function detectPlatforms(ua) {
 export default async ({ req, res, log }) => {
   const config = [
     {
-      "path": "/",
+      "path": "/app",
       "targets": {
         "android": {
           "appName": "Artify",
