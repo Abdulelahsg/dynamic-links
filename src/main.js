@@ -13,9 +13,9 @@ export default async ({ req, res, log }) => {
       "path": "/app",
       "targets": {
         "android": {
-          "appName": "Five",
-          "appPackage": "com.fivesocialmedia.fivesocialmedia",
-          "appPath": "user?screen_name=appwrite1",
+          "appName": "Artify",
+          "appPackage": "com.example.animeimageaigenerator",
+          "appPath": "artify://app/reset-password",
           "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
         },
         "default": "https://twitter.com/appwrite"
