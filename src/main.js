@@ -7,6 +7,8 @@ const __dirname = path.dirname(__filename);
 
 const staticFolder = path.join(__dirname, '../static');
 
+console.log('Current file:', __filename);
+console.log('Current directory:', __dirname);
 // Detector functions
 const detectors = {
   android: (ua) => /Android/i.test(ua),
@@ -106,7 +108,6 @@ export default async ({ req, res, log }) => {
       });
     }
   }
-
   log(`Out of ideas, returning empty response`);
   return res.empty();
 };
