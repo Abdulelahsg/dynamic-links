@@ -30,20 +30,11 @@ const detectors = {
 export default async ({ req, res, log }) => {
   const config = [
     {
-      "path": "/deeplink",
+      "path": "/test",
       "targets": {
-        "android": {
-          "appName": "Artify",
-          "appPackage": "com.example.animeimageaigenerator",
-          "appPath": "artify://app/reset-password",
-          "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
-        },
-        "ios": {
-          "appName": "twitter",
-          "appPath": "user?screen_name=appwrite",
-          "fallback": "https://apps.apple.com/us/app/twitter/id333903271"
-        },
-        "default": "https://twitter.com/appwrite"
+        "mobile": "https://m.example.com/test",
+        "desktop": "https://www.example.com/test",
+        "default": "https://www.example.com/test"
       }
     }
   ]
