@@ -18,9 +18,6 @@ export default async ({ req, res, log }) => {
           "appPath": "user?screen_name=appwrite1",
           "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
         },
-        "desktop": {
-          "fallback": "https://twitter.com/appwrite"
-        },
         "default": "https://twitter.com/appwrite"
       }
     },
@@ -28,7 +25,6 @@ export default async ({ req, res, log }) => {
       "path": "/app1",
       "targets": {
         "android": "https://play.google.com/store/apps/details?id=com.fivesocialmedia1.fivesocialmedia&pli=1",
-        "desktop": "https://www.offeryard.com/",
         "default": "https://www.offeryard.com/"
       }
     }
@@ -47,23 +43,15 @@ export default async ({ req, res, log }) => {
 
   const userAgent = req.headers['user-agent'] || '';
   const isAndroid = /android/i.test(userAgent);
-  const isDesktop = /windows|macintosh|linux/i.test(userAgent);
 
-  if (!isAndroid && !isDesktop) {
-    log(`Non-Android and non-Desktop device detected`);
+  if (!isAndroid) {
+    log(`Non-Android device detected`);
     return res.redirect(targets.default);
   }
 
-  let platform = 'default';
-  if (isAndroid) {
-    platform = 'android';
-  } else if (isDesktop) {
-    platform = 'desktop';
-  }
-
-  const target = targets[platform];
+  const target = targets['android'];
   if (!target) {
-    log(`No redirect for platform ${platform}`);
+    log(`No redirect for Android`);
     return res.redirect(targets.default);
   }
 
