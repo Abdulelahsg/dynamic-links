@@ -7,6 +7,28 @@ const __dirname = path.dirname(__filename);
 
 const staticFolder = path.join(__dirname, '../static');
 
+// Detector functions
+const detectors = {
+  android: (ua) => /Android/i.test(ua),
+  ios: (ua) => /iPhone|iPad|iPod/i.test(ua),
+  mobile: (ua) =>
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua),
+  desktop: (ua) =>
+    !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      ua
+    ) && /Windows|Macintosh|Linux/i.test(ua),
+  default: () => true,
+};
+
+/**
+ * Detects platforms from the user-agent string.
+ * @param {string} ua
+ * @returns {string[]}
+ */
+function detectPlatforms(ua) {
+  return Object.keys(detectors).filter((key) => detectors[key](ua));
+}
+
 export default async ({ req, res, log }) => {
   const config = [
     {
@@ -18,7 +40,6 @@ export default async ({ req, res, log }) => {
           "appPath": "artify://app/reset-password",
           "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
         },
-        "default": "https://twitter.com/appwrite"
       }
     }
   ];
@@ -34,45 +55,47 @@ export default async ({ req, res, log }) => {
   }
   log(`Found targets for path ${req.path}`);
 
-  const userAgent = req.headers['user-agent'] || '';
-  const isAndroid = /android/i.test(userAgent);
+  const platforms = detectPlatforms(req.headers['user-agent']);
+  log(`Detected platforms: ${platforms.join(', ')}`);
 
-  if (!isAndroid) {
-    log(`Non-Android device detected`);
-    return res.redirect(targets.default);
-  }
+  for (const platform of platforms) {
+    const target = targets[platform];
+    if (!target) {
+      log(`No redirect for platform ${platform}`);
+      continue;
+    }
 
-  const target = targets['android'];
-  if (!target) {
-    log(`No redirect for Android`);
-    return res.redirect(targets.default);
-  }
+    if (platform === 'default') {
+      log(`Default for platform ${platform}`);
+      return res.redirect(targets.default);
+    }
 
-  if (typeof target === 'string') {
-    log(`Simple redirect to ${target}`);
-    return res.redirect(target);
-  }
+    if (typeof target === 'string') {
+      log(`Simple redirect to ${target}`);
+      return res.redirect(target);
+    }
 
-  if (typeof target === 'object' && target.appName) {
-    log(`Deep link to app=${target.appName} path=${target.appPath}`);
+    if (typeof target === 'object' && target.appName) {
+      log(`Deep link to app=${target.appName} path=${target.appPath}`);
 
-    const template = readFileSync(
-      path.join(staticFolder, 'deeplink.html')
-    ).toString();
+      const template = readFileSync(
+        path.join(staticFolder, 'deeplink.html')
+      ).toString();
 
-    const html = template
-      .split('{{APP_NAME}}')
-      .join(target.appName)
-      .split('{{APP_PATH}}')
-      .join(target.appPath)
-      .split('{{APP_PACKAGE}}')
-      .join(target.appPackage ?? '')
-      .split('{{FALLBACK}}')
-      .join(target.fallback ?? targets.default ?? '');
+      const html = template
+        .split('{{APP_NAME}}')
+        .join(target.appName)
+        .split('{{APP_PATH}}')
+        .join(target.appPath)
+        .split('{{APP_PACKAGE}}')
+        .join(target.appPackage ?? '')
+        .split('{{FALLBACK}}')
+        .join(target.fallback ?? target.default ?? '');
 
-    return res.send(html, 200, {
-      'Content-Type': 'text/html; charset=utf-8',
-    });
+      return res.send(html, 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      });
+    }
   }
 
   log(`Out of ideas, returning empty response`);
