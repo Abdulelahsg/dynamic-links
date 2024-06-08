@@ -1,7 +1,7 @@
 {
   "name": "dynamic-link",
   "version": "1.0.0",
-  "description": "",
+  "description": "![Join Discord](https://img.shields.io/discord/564160730845151244)",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
@@ -13,7 +13,17 @@
   "devDependencies": {
     "appwrite-function-utils": "^0.1.0",
     "dotenv-cli": "^7.2.1",
+    "eslint": "^9.4.0",
+    "jest": "^29.7.0",
+    "nodeman": "^1.1.2",
     "nodemon": "^3.0.1",
-    "prettier": "^3.0.0"
+    "prettier": "^3.3.1"
+  },
+  "keywords": [],
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
   }
 }
