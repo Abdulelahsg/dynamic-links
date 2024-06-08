@@ -17,7 +17,6 @@ const detectors = {
     !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       ua
     ) && /Windows|Macintosh|Linux/i.test(ua),
-  default: () => true,
 };
 
 /**
@@ -26,7 +25,9 @@ const detectors = {
  * @returns {string[]}
  */
 function detectPlatforms(ua) {
-  return Object.keys(detectors).filter((key) => detectors[key](ua));
+  const detectedPlatforms = Object.keys(detectors).filter((key) => detectors[key](ua));
+  console.log('Detected platforms:', detectedPlatforms);
+  return detectedPlatforms;
 }
 
 export default async ({ req, res, log }) => {
@@ -41,10 +42,10 @@ export default async ({ req, res, log }) => {
           "fallback": "https://play.google.com/store/apps/details?id=com.fivesocialmedia.fivesocialmedia&pli=1"
         },
         "ios": {
-        "appName": "twitter",
-        "appPath": "user?screen_name=appwrite",
-        "fallback": "https://apps.apple.com/us/app/twitter/id333903271"
-      }
+          "appName": "twitter",
+          "appPath": "user?screen_name=appwrite",
+          "fallback": "https://apps.apple.com/us/app/twitter/id333903271"
+        }
       }
     }
   ];
@@ -60,7 +61,10 @@ export default async ({ req, res, log }) => {
   }
   log(`Found targets for path ${req.path}`);
 
-  const platforms = detectPlatforms(req.headers['user-agent']);
+  const userAgent = req.headers['user-agent'] || '';
+  console.log('User agent:', userAgent);
+
+  const platforms = detectPlatforms(userAgent);
   log(`Detected platforms: ${platforms.join(', ')}`);
 
   for (const platform of platforms) {
