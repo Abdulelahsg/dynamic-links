@@ -53,7 +53,7 @@ export default async ({ req, res, log }) => {
     return res.empty();
   }
 
-  const androidTarget = targets.android;
+  const androidTarget = targets['android']; // Accessing the android target correctly
   if (!androidTarget) {
     log(`No redirect target specified for Android platform`);
     return res.empty();
