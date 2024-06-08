@@ -20,13 +20,6 @@ export default async ({ req, res, log }) => {
         },
         "default": "https://twitter.com/appwrite"
       }
-    },
-    {
-      "path": "/app1",
-      "targets": {
-        "android": "https://play.google.com/store/apps/details?id=com.fivesocialmedia1.fivesocialmedia&pli=1",
-        "default": "https://www.offeryard.com/"
-      }
     }
   ];
 
